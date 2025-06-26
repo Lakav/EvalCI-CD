@@ -1,0 +1,8 @@
+#Build le dockerfile
+docker build -t postgres-custom .
+
+#Run le conteneur créé :
+docker run -d -p 3306:3306 --name postgres-custom postgres-custom
+
+#Accéder à la CLI Postgres pour lancer les commandes
+docker exec -it postgres-custom psql -U root -d todoapp
