@@ -12,10 +12,10 @@ export class UserController {
   // Inscription d'un nouvel utilisateur
   async register(req: Request, res: Response): Promise<void> {
     try {
-      const { username, email, password } = req.body;
+      const { nom, prenom, email, password } = req.body;
       
       // Vérifier si tous les champs requis sont présents
-      if (!username || !email || !password) {
+      if (!nom || !prenom || !email || !password) {
         res.status(400).json({ message: 'Tous les champs sont requis' });
         return;
       }
@@ -26,10 +26,6 @@ export class UserController {
         res.status(400).json({ message: 'Cet email est déjà utilisé' });
         return;
       }
-      
-      // Extraire nom et prénom du username ou utiliser username comme nom
-      const nom = username;
-      const prenom = ''; // Champ vide par défaut
       
       // Créer le nouvel utilisateur
       const newUser: User = {
