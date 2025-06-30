@@ -121,12 +121,13 @@ export class TodoComponent implements OnInit {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-
+  
     this.http.put<any>(`http://localhost:3002/api/tasks/${task.id}`, {
       completed: !task.completed
     }, { headers }).subscribe({
       next: (updatedTask) => {
-        this.tasks[index].completed = updatedTask.completed;
+        // Mets à jour la tâche locale avec la valeur retournée par l'API
+        this.tasks[index].completed = updatedTask.task.completed;
       },
       error: () => {
         alert('Erreur lors de la mise à jour de la tâche');
