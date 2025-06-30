@@ -25,7 +25,7 @@
           <input
             *ngIf="task.editing"
             type="text"
-            [(ngModel)]="task.text"
+            [(ngModel)]="task.title"
             class="form-control form-control-sm me-2"
           />
 
@@ -36,7 +36,7 @@
             class="task-text flex-grow-1"
           >
             <i class="fas fa-check-circle task-icon me-2" *ngIf="task.completed"></i>
-            {{ task.text }}
+            {{ task.title }}
           </span>
 
           <!-- Task Actions -->
