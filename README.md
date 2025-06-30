@@ -13,7 +13,7 @@ L'ensemble du projet est conteneurisé avec Docker et orchestré via Docker Comp
 ## Architecture du Projet
 
 ```
-Angular-19-Todo-App/
+EvalCI-CD/
 ├── frontend/          # Application Angular 19
 ├── backend/           # API Node.js/TypeScript
 ├── database/          # Configuration PostgreSQL et scripts d'initialisation
@@ -70,7 +70,7 @@ Angular-19-Todo-App/
 
 ```bash
 git clone <URL_DU_REPO>
-cd Angular-19-Todo-App
+cd EvalCI-CD
 ```
 
 ### Démarrer l'application avec Docker Compose
@@ -163,7 +163,7 @@ docker-compose restart frontend
 
 ```bash
 # Se connecter à la base de données PostgreSQL
-docker exec -it angular-19-todo-app-database-1 psql -U postgres -d todo_app
+docker exec -it EvalCI-CD-database-1 psql -U postgres -d todo_app
 
 # Lister les tables
 \dt

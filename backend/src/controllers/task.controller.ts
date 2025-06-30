@@ -1,34 +1,39 @@
 import { Request, Response } from 'express';
 import { TaskModel, Task } from '../models/task.model';
 
-const taskModel = new TaskModel();
-
 export class TaskController {
+  private taskModel: TaskModel;
+  
+  constructor(taskModel?: TaskModel) {
+    this.taskModel = taskModel || new TaskModel();
+  }
   // Créer une nouvelle tâche
   async createTask(req: Request, res: Response) {
     try {
-      const userId = req.user?.userId;
       const { title, description, completed } = req.body;
+      const userId = req.user?.userId;
       
       if (!userId) {
         return res.status(401).json({ message: 'Non autorisé' });
       }
       
+      // Valider les données
       if (!title) {
         return res.status(400).json({ message: 'Le titre est requis' });
       }
       
-      const newTask = await taskModel.create({
+      // Créer l'objet tâche
+      const newTask: Task = {
         title,
-        description,
-        completed,
+        description: description || '',
+        completed: completed || false,
         user_id: userId
-      });
+      };
       
-      res.status(201).json({
-        message: 'Tâche créée avec succès',
-        task: newTask
-      });
+      // Créer la tâche et récupérer l'objet complet
+      const task = await this.taskModel.create(newTask);
+      
+      res.status(201).json({ message: 'Tâche créée avec succès', task });
     } catch (error) {
       console.error('Erreur lors de la création de la tâche:', error);
       res.status(500).json({ message: 'Erreur serveur' });
@@ -44,9 +49,8 @@ export class TaskController {
         return res.status(401).json({ message: 'Non autorisé' });
       }
       
-      const tasks = await taskModel.findByUserId(userId);
-      
-      res.status(200).json({ tasks });
+      const tasks = await this.taskModel.findByUserId(userId);
+      res.status(200).json({ message: 'Tâches récupérées avec succès', tasks });
     } catch (error) {
       console.error('Erreur lors de la récupération des tâches:', error);
       res.status(500).json({ message: 'Erreur serveur' });
@@ -67,18 +71,17 @@ export class TaskController {
         return res.status(400).json({ message: 'ID de tâche invalide' });
       }
       
-      const task = await taskModel.findById(taskId);
+      const existingTask = await this.taskModel.findById(taskId);
       
-      if (!task) {
+      if (!existingTask) {
         return res.status(404).json({ message: 'Tâche non trouvée' });
       }
-      
-      // Vérifier que la tâche appartient à l'utilisateur connecté
-      if (task.user_id !== userId) {
+
+      if (existingTask.user_id !== userId) {
         return res.status(403).json({ message: 'Accès non autorisé à cette tâche' });
       }
-      
-      res.status(200).json({ task });
+
+      res.status(200).json({ message: 'Tâche récupérée avec succès', task: existingTask });
     } catch (error) {
       console.error('Erreur lors de la récupération de la tâche:', error);
       res.status(500).json({ message: 'Erreur serveur' });
@@ -101,7 +104,7 @@ export class TaskController {
       }
       
       // Vérifier que la tâche existe
-      const existingTask = await taskModel.findById(taskId);
+      const existingTask = await this.taskModel.findById(taskId);
       
       if (!existingTask) {
         return res.status(404).json({ message: 'Tâche non trouvée' });
@@ -113,13 +116,14 @@ export class TaskController {
       }
       
       // Mettre à jour la tâche
-      const updatedTask = await taskModel.update(taskId, {
+      const updateData = {
         title,
         description,
         completed
-      });
+      };
+      const updatedTask = await this.taskModel.update(taskId, updateData);
       
-      res.status(200).json({
+      res.status(200).json({ 
         message: 'Tâche mise à jour avec succès',
         task: updatedTask
       });
@@ -144,7 +148,7 @@ export class TaskController {
       }
       
       // Vérifier que la tâche existe
-      const existingTask = await taskModel.findById(taskId);
+      const existingTask = await this.taskModel.findById(taskId);
       
       if (!existingTask) {
         return res.status(404).json({ message: 'Tâche non trouvée' });
@@ -156,7 +160,7 @@ export class TaskController {
       }
       
       // Supprimer la tâche
-      await taskModel.delete(taskId);
+      await this.taskModel.delete(taskId);
       
       res.status(200).json({ message: 'Tâche supprimée avec succès' });
     } catch (error) {
