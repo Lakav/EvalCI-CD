@@ -14,8 +14,14 @@ import { Router } from '@angular/router';
 export class TodoComponent implements OnInit {
   tasks: { text: string; completed: boolean; editing: boolean }[] = [];
   newTask: string = '';
+  isAuthenticated = false; // Ajouté
+
   constructor(private router: Router) {}
+
   ngOnInit() {
+    // Vérifie l'authentification
+    this.isAuthenticated = !!localStorage.getItem('token');
+
     // Load tasks from local storage
     const savedTasks = localStorage.getItem('tasks');
     if (savedTasks) {
@@ -33,9 +39,7 @@ export class TodoComponent implements OnInit {
     }, 3600000); // Every 60 mins
   }
 
-
   private showTaskNotification() {
-
     const userName = localStorage.getItem('userName') || 'User';
     const appName = localStorage.getItem('appName') || 'Todo App';
 
@@ -58,13 +62,12 @@ export class TodoComponent implements OnInit {
         window.focus();
         this.router.navigate(['/todos']); // Navigate to the task page
       };
-    }else{
+    } else {
       if ("Notification" in window) {
         Notification.requestPermission();
       }
     }
   }
-
 
   addTask() {
     if (this.newTask.trim()) {
@@ -106,4 +109,4 @@ export class TodoComponent implements OnInit {
   private saveToLocalStorage() {
     localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
-}
+}  

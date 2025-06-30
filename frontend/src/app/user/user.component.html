@@ -1,0 +1,33 @@
+<div class="login-container">
+  <h2>Connexion</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        autocomplete="username"
+        [(ngModel)]="email"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        required
+        autocomplete="current-password"
+        [(ngModel)]="password"
+      />
+    </div>
+    <button type="submit" class="login-btn">Se connecter</button>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  </form>
+  <div class="register-link">
+    <span>Pas encore de compte ?</span>
+    <a routerLink="/register" class="register-btn">S'inscrire</a>
+  </div>
+</div>

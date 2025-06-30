@@ -1,0 +1,75 @@
+.login-container {
+  max-width: 350px;
+  margin: 60px auto;
+  padding: 2rem 2.5rem;
+  background-color: #333;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  color: goldenrod;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.6rem;
+  color: black;
+  border: 1px solid black;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+input:focus {
+  border-color: goldenrod;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.7rem;
+  background: goldenrod;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+
+.login-btn:hover {
+  background: goldenrod;
+}
+
+.register-link {
+  margin-top: 1.5rem;
+}
+
+.register-btn {
+  margin-left: 0.5rem;
+  color: goldenrod;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.register-btn:hover {
+  color: goldenrod;
+}
