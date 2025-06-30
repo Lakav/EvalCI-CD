@@ -14,7 +14,10 @@ jobs:
 
       - name: Archive project
         run: |
-          tar --warning=no-file-changed -czf app.tar.gz --exclude='.git' .
+          tar --warning=no-file-changed -czf app.tar.gz --exclude='.git' . || true
+
+      - name: Check archive
+        run: test -f app.tar.gz
 
       - name: Copy project to server
         uses: appleboy/scp-action@v0.1.7
