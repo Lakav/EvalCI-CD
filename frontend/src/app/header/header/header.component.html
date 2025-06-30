@@ -23,7 +23,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto">
         <li class="nav-item" [class.active]="currentRoute === '/tasks'">
           <a class="nav-link" routerLink="/tasks" (click)="closeNavbar()">Task Cards</a>
         </li>
@@ -35,6 +35,12 @@
         </li>
         <li class="nav-item" [class.active]="currentRoute === '/guess-word'">
           <a class="nav-link" routerLink="/guess-word" (click)="closeNavbar()">Guess Game</a>
+        </li>
+        <li class="nav-item" *ngIf="!isAuthenticated" [class.active]="currentRoute === '/user'">
+          <a class="nav-link" routerLink="/user" (click)="closeNavbar()" style="color: goldenrod;">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="isAuthenticated">
+          <button class="nav-link btn btn-link" (click)="logout()" style="color:goldenrod;">Déconnexion</button>
         </li>
       </ul>
     </div>

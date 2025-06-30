@@ -42,6 +42,16 @@ export class HeaderComponent implements AfterViewInit {
     }
   }
 
+  // === Auth Functions ===
+  get isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/user']);
+  }
+
   // === App Name Functions ===
   loadAppName() {
     const storedAppName = localStorage.getItem('appName');
