@@ -1,0 +1,44 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Archive project
+        run: |
+          tar --warning=no-file-changed -czf app.tar.gz --exclude='.git' . || true
+
+      - name: Check archive
+        run: test -f app.tar.gz
+
+      - name: Copy project to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 212.83.131.82
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "app.tar.gz"
+          target: "/root/"
+
+      - name: Deploy with docker-compose
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 212.83.131.82
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /root
+            rm -rf EvalCI-CD
+            mkdir EvalCI-CD
+            tar xzf app.tar.gz -C EvalCI-CD --strip-components=1
+            cd EvalCI-CD
+            docker-compose down || true
+            docker-compose up -d --build

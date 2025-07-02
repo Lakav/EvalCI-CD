@@ -27,32 +27,40 @@ export class UserController {
         return;
       }
       
+      // Hacher le mot de passe
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      
       // Créer le nouvel utilisateur
       const newUser: User = {
         nom,
         prenom,
         email,
-        password
+        password: hashedPassword
       };
 
-      const userId = await userModel.create(newUser);
+      const createdUser = await userModel.create(newUser);
 
       // Générer un token JWT
       const token = jwt.sign(
-        { userId },
+        { userId: createdUser.id },
         process.env.JWT_SECRET as string,
         { expiresIn: '24h' }
       );
-      
+
+      // Récupérer les informations de l'utilisateur sans le mot de passe
+      const user = {
+        id: createdUser.id,
+        nom,
+        prenom,
+        email
+      };
+
+      // Renvoyer une réponse avec le token et l'utilisateur
       res.status(201).json({
         message: 'Utilisateur créé avec succès',
-        user: {
-          id: userId,
-          nom: newUser.nom,
-          prenom: newUser.prenom,
-          email: newUser.email
-        },
-        token
+        token,
+        user
       });
     } catch (error) {
       console.error('Erreur lors de l\'inscription:', error);
@@ -88,16 +96,20 @@ export class UserController {
         process.env.JWT_SECRET as string,
         { expiresIn: '24h' }
       );
-      
+
+      // Créer un objet utilisateur sans le mot de passe
+      const userResponse = {
+        id: user.id,
+        nom: user.nom,
+        prenom: user.prenom,
+        email: user.email
+      };
+
+      // Renvoyer une réponse avec le token et l'utilisateur
       res.status(200).json({
         message: 'Connexion réussie',
-        user: {
-          id: user.id,
-          nom: user.nom,
-          prenom: user.prenom,
-          email: user.email
-        },
-        token
+        token,
+        user: userResponse
       });
     } catch (error) {
       console.error('Erreur lors de la connexion:', error);
