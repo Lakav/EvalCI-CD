@@ -2,7 +2,7 @@ name: Deploy to VM
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   test:
@@ -12,11 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install backend dependencies
         run: npm install
+        working-directory: ./backend
 
-      - name: Run tests
+      - name: Run backend tests
         run: npm test
+        working-directory: ./backend
   deploy:
     runs-on: ubuntu-latest
 
