@@ -80,7 +80,7 @@ input:focus {
 
 .success {
   color: white;
-  background-color: #4caf50;
+  background-color: #4CAF50;
   padding: 10px;
   margin-top: 15px;
   border-radius: 4px;
@@ -94,4 +94,18 @@ input:focus {
   margin-top: 15px;
   border-radius: 4px;
   text-align: center;
+}
+
+/* Styles pour les erreurs de champ */
+.field-error {
+  color: #ff4d4d;
+  font-size: 0.85em;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.input-error {
+  border: 1px solid #ff4d4d !important;
+  background-color: rgba(255, 77, 77, 0.05);
 }
