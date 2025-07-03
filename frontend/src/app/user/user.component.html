@@ -24,7 +24,10 @@
       />
     </div>
     <button type="submit" class="login-btn">Se connecter</button>
-    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    <!-- Message d'erreur toujours visible avec style conditionnel -->
+    <div [ngStyle]="{'display': errorMessage ? 'block' : 'none'}" class="error" style="margin-top: 15px;">
+      {{ errorMessage || 'Erreur' }}
+    </div>
   </form>
   <div class="register-link">
     <span>Pas encore de compte ?</span>

@@ -18,8 +18,13 @@
       <input id="password" name="password" type="password" required [(ngModel)]="password" />
     </div>
     <button type="submit" class="register-btn">S'inscrire</button>
-    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-    <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+    <!-- Messages d'erreur et de succès conditionnels -->
+    <div class="error" *ngIf="errorMessage" style="margin-top: 15px;">
+      {{ errorMessage }}
+    </div>
+    <div class="success" *ngIf="successMessage" style="margin-top: 15px;">
+      {{ successMessage }}
+    </div>
   </form>
   <div class="login-link">
     <span>Déjà un compte ?</span>
