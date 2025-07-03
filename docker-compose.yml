@@ -15,6 +15,22 @@ services:
     networks:
       - app-network
 
+  database_test:
+    build:
+      context: ./database
+      dockerfile: Dockerfile.test
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todo_app_test
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data
+      - ./database/init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
   backend:
     build: ./backend
     ports:
@@ -34,10 +50,11 @@ services:
       - "4200:80"
     networks:
       - app-network
-    
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   postgres_data:
+  postgres_data_test:
