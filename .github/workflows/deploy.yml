@@ -3,8 +3,20 @@ name: Deploy to VM
 on:
   push:
     branches: [ main, develop ]
+  schedule:
+    - cron: '0 22 * * *' # Tous les jours à 22h00 UTC
 
 jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Start backend
+        run: docker-compose up -d
+      - name: Run Cypress tests
+        run: npm cy:open
   test:
     runs-on: ubuntu-latest
 
