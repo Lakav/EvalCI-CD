@@ -26,17 +26,13 @@ export class UserController {
         res.status(400).json({ message: 'Cet email est déjà utilisé' });
         return;
       }
-      
-      // Hacher le mot de passe
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-      
+
       // Créer le nouvel utilisateur
       const newUser: User = {
         nom,
         prenom,
         email,
-        password: hashedPassword
+        password
       };
 
       const createdUser = await userModel.create(newUser);
