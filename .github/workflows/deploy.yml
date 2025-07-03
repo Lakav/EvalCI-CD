@@ -19,12 +19,29 @@ jobs:
       - name: Run backend tests
         run: npm test
         working-directory: ./backend
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
   deploy:
     runs-on: ubuntu-latest
+    needs: test
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # Création du fichier .env pour le déploiement
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          PORT=3002
+          EOF
 
       - name: Archive project
         run: |
@@ -39,7 +56,7 @@ jobs:
           host: 212.83.131.82
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "app.tar.gz"
+          source: "app.tar.gz,.env"
           target: "/root/"
 
       - name: Deploy with docker-compose
@@ -50,9 +67,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /root
-            rm -rf EvalCI-CD
-            mkdir EvalCI-CD
-            tar xzf app.tar.gz -C EvalCI-CD --strip-components=1
-            cd EvalCI-CD
-            docker-compose down || true
+            tar -xzf app.tar.gz
+            docker-compose down
             docker-compose up -d --build
