@@ -24,7 +24,11 @@ console.log('Application Express initialisée, port:', PORT);
 
 // Middleware
 try {
-  app.use(cors());
+  // Autoriser uniquement le front Angular local (modifie l'URL si besoin)
+  app.use(cors({
+    origin: 'http://localhost:4200',
+    credentials: true
+  }));
   app.use(express.json());
   console.log('Middleware configuré');
 } catch (error) {
