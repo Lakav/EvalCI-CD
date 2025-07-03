@@ -1,10 +1,5 @@
 # Partir de l'image officielle de PostgreSQL
 FROM postgres:latest
 
-# Les variables d'environnement sont définies dans le docker-compose.yml
-# ENV POSTGRES_USER=postgres
-# ENV POSTGRES_PASSWORD=postgres
-# ENV POSTGRES_DB=todo_app
-
 # Copie du script d'initialisation
 COPY init-scripts/init.sql /docker-entrypoint-initdb.d/
